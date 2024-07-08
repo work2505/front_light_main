@@ -124,14 +124,20 @@ export default function QuestDrawer(props: {
       <DrawerTrigger>
         <div className="h-full inline-flex items-center justify-end">
           {timerLabel ? (
-            <Button className="pointer-events-none">{timerLabel}</Button>
+            <>
+              {
+                (timerLabel === 'Reward available')
+                  ? (<Button className="pointer-events-none">{'Completed'}</Button>)
+                  : (<Button className="pointer-events-none">{timerLabel}</Button>)
+              }
+            </>
           ) : (
             <Button
               variant={'default'}
               className="w-24 border-2 font-medium text-normal-stroke rounded-full py-1"
               onClick={() => setIsOpen(true)}
             >
-              {confirmationFinishQuest ? 'Completed' : 'Complete'}
+              Complete
             </Button>
           )}
         </div>

@@ -70,7 +70,8 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
     setIsRotate(true);
     const tmp = await handleReferrals(page, 10);
     if (tmp?.referrals) setStateFriends(tmp.referrals);
-    if (tmp?.earnedFromReferrals) efr.setEarnedFromReferrals(tmp.earnedFromReferrals);
+    if (tmp?.earnedFromReferrals && tmp.earnedFromReferrals > -1)
+      efr.setEarnedFromReferrals(tmp.earnedFromReferrals);
     setTimeout(() => {
       setIsRotate(false);
     }, 1000);
@@ -78,6 +79,7 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
 
   const handleGetAllRefProfit = useCallback(async () => {
     await collectRefferalAllProfit();
+    await refreshReferrals();
     await fetchPlayer();
   }, []);
 
@@ -128,7 +130,7 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
           Get Income
           <HoneyDisplay
             isBold={false}
-            amount={0}
+            amount={efr?.earnedFromReferrals || 0}
             iconSize={16}
             textClass="text-base"
           />

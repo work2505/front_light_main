@@ -112,8 +112,7 @@ export default function Page() {
   const fetchRanksData = React.useCallback(
     async (_user: Tables<'users'>) => {
       const ranks = await getRanks();
-      console.log('ranks', ranks);
-
+      // console.log('ranks', ranks);
       if (!ranks) return;
 
       if (user) {
@@ -186,8 +185,8 @@ export default function Page() {
       //   setStateLeaders(topPlayers);
       // }
 
-      const refQuests = await getReferralQuests();
-      console.log(refQuests);
+      // const refQuests = await getReferralQuests();
+      // console.log(refQuests);
 
       // const playerQuests = await getPlayerQuests();
       // console.log("playerQuests", playerQuests);
@@ -196,19 +195,17 @@ export default function Page() {
       const me = await getMeInfo();
       setStateUser(me);
 
-      const referrals = await getReferrals();
+      // const referrals = await getReferrals();
       // alert(JSON.stringify(referrals, null, 10))
-      console.log(referrals);
+      // console.log(referrals);
 
       const userRanks = await getPlayerRanks();
+      if (userRanks) setStateUserRank(userRanks);
       console.log(userRanks);
 
       const curRefQuest = data.find((quest) => !quest.isCompleted);
       console.log(curRefQuest);
-
-      if (curRefQuest) {
-        setCurrentRefQuest(curRefQuest);
-      }
+      if (curRefQuest) setCurrentRefQuest(curRefQuest);
       if (user?.playersOrcs.hp) {
         console.log(user?.playersOrcs.hp);
         setHealthBoss(user?.playersOrcs.hp);
