@@ -31,7 +31,6 @@ import {
   getUserQuests,
   startFarming,
 } from '@/services/network/AxiosService';
-import { REWARD_COMMON_REFERRER, REWARD_PREMIUM_REFERRER } from '@/constants';
 
 const SearchParamsComponent = ({
   setTgId,
@@ -103,7 +102,6 @@ export default function Page() {
 
   const fetchPlayer = React.useCallback(async () => {
     const user: Tables<'users'> | null = await getMeInfo();
-
     if (user) {
       setStateUser({ ...user, balance: user.balance });
     }
@@ -199,6 +197,7 @@ export default function Page() {
       setStateUser(me);
 
       const referrals = await getReferrals();
+      // alert(JSON.stringify(referrals, null, 10))
       console.log(referrals);
 
       const userRanks = await getPlayerRanks();

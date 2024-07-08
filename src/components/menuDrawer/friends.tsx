@@ -3,7 +3,7 @@ import Image from 'next/image';
 import ReferralRewardCard from "../referral-reward-card";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
-import { collectRefferalProfit } from "@/services/network/AxiosService";
+import { collectRefferalAllProfit, collectRefferalProfit, getMeInfo } from "@/services/network/AxiosService";
 import { useCallback, useEffect, useState } from "react";
 import { Table } from "lucide-react";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -15,6 +15,7 @@ import { TelegramShareButton } from "react-share";
 import { usePopup } from "@tma.js/sdk-react";
 import HoneyDisplay from "../honey-display";
 import { TFriendsRequest } from "../../../types/types";
+import { Tables } from "../../../types/supabase";
 
 
 export function MDFriends({ props, pages, efr, handleReferrals }:
@@ -38,7 +39,14 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
 
   const [page, setPage] = pages;
 
-  const { user, currentRefQuest, setStateFriends } = useData()!;
+  const { user, setStateUser, setStateFriends } = useData()!;
+
+  const fetchPlayer = useCallback(async () => {
+    const user: Tables<'users'> | null = await getMeInfo();
+    if (user) {
+      setStateUser({ ...user, balance: user.balance });
+    }
+  }, []);
 
   const url = `https://t.me/work_front_back_bot/front_work?startapp=frP-${user?.tgId}`;
 
@@ -68,11 +76,14 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
     }, 1000);
   }, [page, setStateFriends]);
 
-  const getRefProfit = useCallback(() => {
-    if (currentRefQuest) {
-      collectRefferalProfit(currentRefQuest.id);
-    }
-  }, [currentRefQuest]);
+  const handleGetAllRefProfit = useCallback(async () => {
+    await collectRefferalAllProfit();
+    await fetchPlayer();
+  }, []);
+
+  // const getRefProfit = useCallback(() => {
+  //   if (currentRefQuest) collectRefferalProfit(currentRefQuest.id);
+  // }, [currentRefQuest]);
 
   return (
     <div className="w-full  flex flex-col mt-4 mb-4 overflow-auto h-[60%] px-2">
@@ -111,12 +122,13 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
         <Button
           variant={'default'}
           className="px-4 py-1.5 gap-0.5"
-          onClick={() => getRefProfit()}
+          onClick={() => handleGetAllRefProfit()}
+        // onClick={() => getRefProfit()}
         >
           Get Income
           <HoneyDisplay
             isBold={false}
-            amount={efr.earnedFromReferrals}
+            amount={0}
             iconSize={16}
             textClass="text-base"
           />
@@ -156,9 +168,9 @@ export function MDFriends({ props, pages, efr, handleReferrals }:
             </Button>
           </motion.div>
         </div>
-        <div className="w-full min-h-20 bg-backdrop rounded-2xl inline-flex items-center justify-center mx-auto">
+        <div className="w-full min-h-20 max-h-30 owerflow-auto bg-backdrop rounded-2xl inline-flex items-center justify-center mx-auto">
           {(props?.friends && props.friends.length > 0) ? (
-            <div className="w-full flex flex-col overflow-x-hidden overflow-y-auto max-h-[50%]">
+            <div className="w-full flex flex-col overflow-x-hidden overflow-y-auto max-h-32">
               <div className="w-full grid grid-cols-2">
                 <div className="max-w-full text-center text-normal-stroke">
                   Name

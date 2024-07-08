@@ -1,4 +1,3 @@
-import { getNewRank } from '@/utils/getNewRank';
 import { Tables } from '../../../types/supabase';
 import { Quest, Rank, Referral, User } from '../../../types/types';
 
@@ -6,6 +5,19 @@ import axios from 'axios';
 import $api from '@/http';
 const HOST = 'beeverseserver.online';
 const protocol = 'https';
+
+export async function collectRefferalAllProfit() {
+  const route = `referrals/collect-profit`;
+
+  const protocol = 'https';
+  const url = `${protocol}://${HOST}/api/${route}`;
+  const data = $api
+    .post(url)
+    .then((response) => response.data)
+    .catch((error) => error);
+
+  return data;
+}
 
 export async function collectRefferalProfit(refQuestId: string) {
   const route = `referrals/quest/collect-profit/${refQuestId}`;

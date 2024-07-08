@@ -4,7 +4,6 @@ import HoneyDisplay from './honey-display';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import QuestDrawer from './quest-drawer';
 import { useData } from '@/controllers/context';
-import { useEffect } from 'react';
 
 export default function QuestCard(props: {
   reward: number;
@@ -23,8 +22,6 @@ export default function QuestCard(props: {
 }) {
   const utils = useUtils(true);
   const { friends } = useData()!;
-
-  useEffect(() => { alert(JSON.stringify(props, null, 10)) }, [])
 
   let isUrlTelegram = false;
   let isUrlX = false;
