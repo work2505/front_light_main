@@ -19,7 +19,7 @@ import {
   getTopPlayers,
   updateUserBonus,
 } from '@/services/network/AxiosService';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Cooldown } from '@/utils/timer';
@@ -252,8 +252,9 @@ export default function Page() {
             className="bg-red-400 opacity-0 w-full fixed top-[190px] h-[360px] z-[799]"
           ></div>
         )}
-        <div className="w-full h-full inline-flex items-center justify-center px-4 py-2">
-          <MultiTapButton>
+
+        <MultiTapButton>
+          <div className="w-full h-full inline-flex items-center justify-center px-4 py-2">
             <div>
               <BearDead visible={gameEnd} />
               <BearIdle visible={!atackInProgress && !gameEnd} />
@@ -266,8 +267,8 @@ export default function Page() {
             </div>
             <BeeIdle visible={!atackInProgress || gameEnd} />
             <BeeHit visible={atackInProgress && !gameEnd} />
-          </MultiTapButton>
-        </div>
+          </div>
+        </MultiTapButton>
 
         <div>
           <Bossdefeat

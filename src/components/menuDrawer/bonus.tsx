@@ -2,7 +2,7 @@ import { useData } from "@/controllers/context";
 import Image from 'next/image';
 import QuestCard from "../quest-card";
 import { Button } from "../ui/button";
-import { CSSProperties, useCallback, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { startFarming } from "@/services/network/AxiosService";
 import { BONUS_INTERVAL } from "@/constants";
 import { formatTime } from "@/lib/utils";
@@ -16,15 +16,25 @@ export function MDBonus({ timer, claims, setTimeRemaining, timeRemaining }:
     timeRemaining: number | null
   }) {
 
-  const buttonStyle: CSSProperties = timer
-    ? { opacity: 0.5, pointerEvents: 'none' }
-    : {};
+  const [buttonStyle, setButtonStyle] = useState<CSSProperties>({});
+
+  useEffect(() => {
+    if (timer) setButtonStyle({ opacity: 0.5, pointerEvents: 'none' });
+    else setButtonStyle({});
+  }, [timer]);
+
+  // useEffect(() => {
+  //   alert(timeRemaining);
+  // }, [])
+
 
   const [earnedH, setEarnedH] = useState<number>(0);
 
   const { user, earnedHoneyFromFarming, setStateUser, currentRefQuest, quests: myQuests } = useData()!;
 
-  if (user?.balance) setEarnedH(Number((user.balance * 0.005).toFixed(2)));
+  useEffect(() => {
+    if (user?.balance) setEarnedH(Number((user.balance * 0.005).toFixed(2)));
+  }, [user?.balance])
 
   const [claim, setIsClaimed] = claims;
 
@@ -80,14 +90,23 @@ export function MDBonus({ timer, claims, setTimeRemaining, timeRemaining }:
           </div>
         </div>
       </div>
-
-      <Button
-        onClick={() => handleBonus()}
-        className="w-36 mb-4"
-        style={buttonStyle}
-      >
-        {claim ? formatTime(timeRemaining) : 'Get bonus'}
-      </Button>
+      {timeRemaining ? (
+        <Button
+          // onClick={() => handleBonus()}
+          className="w-36 mb-4"
+          style={buttonStyle}
+        >
+          {formatTime(timeRemaining)}
+        </Button>
+      ) : (
+        <Button
+          onClick={() => handleBonus()}
+          className="w-36 mb-4"
+          style={buttonStyle}
+        >
+          {'Get bonus'}
+        </Button>
+      )}
     </div>
   );
 }

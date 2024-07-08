@@ -230,8 +230,8 @@ export default function MenuDrawer(props: TMDProps) {
           <MDBonus
             timer={timer}
             claims={[claim, setIsClaimed]}
-            setTimeRemaining={setTimeRemaining}
             timeRemaining={timeRemaining}
+            setTimeRemaining={setTimeRemaining}
           />)}
         {props.section === 'quests' && props.quests && (<MDQuests />)}
       </DrawerContent>
